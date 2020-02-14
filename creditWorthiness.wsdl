@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://worthiness.credit" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://worthiness.credit">
+    <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://worthiness.credit">
+            <xs:element name="creditCheck">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="SSN" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="creditCheckResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="creditCheckRequest">
+        <wsdl:part name="parameters" element="ns:creditCheck"/>
+    </wsdl:message>
+    <wsdl:message name="creditCheckResponse">
+        <wsdl:part name="parameters" element="ns:creditCheckResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="creditWorthinessPortType">
+        <wsdl:operation name="creditCheck">
+            <wsdl:input message="ns:creditCheckRequest" wsaw:Action="urn:creditCheck"/>
+            <wsdl:output message="ns:creditCheckResponse" wsaw:Action="urn:creditCheckResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="creditWorthinessSoap11Binding" type="ns:creditWorthinessPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="creditCheck">
+            <soap:operation soapAction="urn:creditCheck" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="creditWorthinessSoap12Binding" type="ns:creditWorthinessPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="creditCheck">
+            <soap12:operation soapAction="urn:creditCheck" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="creditWorthinessHttpBinding" type="ns:creditWorthinessPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="creditCheck">
+            <http:operation location="creditCheck"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="creditWorthiness">
+        <wsdl:port name="creditWorthinessHttpSoap11Endpoint" binding="ns:creditWorthinessSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/creditWorthiness.creditWorthinessHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="creditWorthinessHttpSoap12Endpoint" binding="ns:creditWorthinessSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/creditWorthiness.creditWorthinessHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="creditWorthinessHttpEndpoint" binding="ns:creditWorthinessHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/creditWorthiness.creditWorthinessHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
